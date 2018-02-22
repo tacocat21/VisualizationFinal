@@ -1,13 +1,8 @@
 import pandas as pd
-import os
 import ipdb
-import json
 import collections
-
-UN_ORIGINAL_DATA_FILENAME = os.path.join(os.path.dirname(__file__), "data",
-                                         "UN_MigrantStockByOriginAndDestination_2017.xlsx")
-REGION_DATA_FILENAME = os.path.join(os.path.dirname(__file__), "data", "region_result.json")
-IMMIGRATION_DATA_FILENAME = os.path.join(os.path.dirname(__file__), "data", "immigration_result.json")
+import util
+from util import save_json
 
 CONTINENT = set(['AFRICA', 'LATIN AMERICA AND THE CARIBBEAN', 'NORTHERN AMERICA', 'EUROPE', 'ASIA', 'OCEANIA'])
 REGIONS = set(['Eastern Africa', 'Middle Africa', 'Northern Africa', 'Southern Africa',
@@ -16,7 +11,8 @@ REGIONS = set(['Eastern Africa', 'Middle Africa', 'Northern Africa', 'Southern A
                'Southern Europe', 'Western Europe', 'Caribbean', 'Central America',
                'South America', 'Australia/New Zealand', 'Melanesia', 'Micronesia',
                'Polynesia', 'North America'])
-IGNORE = set(['More developed regions',
+IGNORE = set(['Sub-Saharan Africa',
+              'More developed regions',
               'Less developed regions',
               'Least developed countries',
               'Less developed regions, excluding least developed countries',
@@ -28,7 +24,7 @@ IGNORE = set(['More developed regions',
 
 
 def load_data():
-    return pd.read_excel(UN_ORIGINAL_DATA_FILENAME, skiprows=15, sheet_name='Table 1', convert_float=True)
+    return pd.read_excel(util.UN_ORIGINAL_DATA_FILENAME, skiprows=15, sheet_name='Table 1', convert_float=True)
 
 
 def get_year(row):
@@ -41,10 +37,6 @@ def get_year(row):
 def get_location(row):
     return row[2]
 
-
-def save_json(data, filename):
-    with open(filename, 'w') as fp:
-        json.dump(data, fp)
 
 def get_top_n(row, n=10):
     # countries = row.keys()[9:]
@@ -74,18 +66,19 @@ def run():
     country_region_mapping = country_to_region_mapping(df)
     # ipdb.set_trace()
     # year -> region ->
-    region_result = collections.defaultdict(lambda: collections.defaultdict(dict))
-    # year -> country -> top 10 countries migrating to country
+    # immigration result -> going to [year][country]
+    # emigration result -> leaving [year][country]
+    immigration_region_result = collections.defaultdict(lambda: collections.defaultdict(dict))
+    emigration_region_result = collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict(int)))
+    # year -> country -> top 10 countries immigrating/emigrating to country
     immigration_country_result = collections.defaultdict(lambda: collections.defaultdict(dict))
-    emigration_country_result = collections.defaultdict(lambda: collections.defaultdict(dict))
+    emigration_country_result = collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict(int)))
     for _, row in df.iterrows():
-        # ipdb.set_trace()
         year = get_year(row)
         if year is None:
-            print(row)
             continue
         location = get_location(row)
-        if location in IGNORE:
+        if location in IGNORE or location in CONTINENT:
             continue
         elif location in REGIONS:
             # ipdb.set_trace()
@@ -96,13 +89,35 @@ def run():
                 except ValueError:
                     continue
             top_10 = get_top_n(region_sum, n=10)
-            region_result[year][location] = top_10
+            immigration_region_result[year][location] = top_10
         else:
             top_10 = get_top_n(row, n=10)
             immigration_country_result[year][location] = top_10
-    ipdb.set_trace()
-    save_json(region_result, REGION_DATA_FILENAME)
-    save_json(immigration_country_result, IMMIGRATION_DATA_FILENAME)
+            # ipdb.set_trace()
+            for c in row.keys()[9:]:
+                try:
+                    emigration_country_result[year][c][location] = int(row[c])
+                except ValueError:
+                    continue
+    # ipdb.set_trace()
+    for y in emigration_country_result:
+        for c in emigration_country_result[y]:
+            region = country_region_mapping[c]
+            for k in emigration_country_result[y][c]:
+                emigration_region_result[y][region][country_region_mapping[k]] += emigration_country_result[y][c][k]
+    for y in emigration_region_result:
+        for c in emigration_region_result[y]:
+            emigration_region_result[y][c] = get_top_n(emigration_region_result[y][c])
+    for y in emigration_country_result:
+        for c in emigration_country_result[y]:
+            # for l in emigration_country_result[y][c]:
+            emigration_country_result[y][c] = get_top_n(emigration_country_result[y][c], n=10)
+    # ipdb.set_trace()
+    save_json(emigration_region_result, util.EMIGRATION_REGION_DATA_FILENAME)
+    save_json(emigration_country_result, util.EMIGRATION_COUNTRY_DATA_FILENAME)
+    save_json(immigration_region_result, util.IMMIGRATION_REGION_DATA_FILENAME)
+    save_json(immigration_country_result, util.IMMIGRATION_COUNTRY_DATA_FILENAME)
+
 
 
 if __name__ == "__main__":
