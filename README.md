@@ -7,5 +7,8 @@ Framework: Flask
 Data sources:
 UN Global Census Data
 
+To run the server:
+sh backend/run.sh
+
 Frontend
 Libraries: d3.js, DataMaps
