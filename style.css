@@ -1,0 +1,32 @@
+.state-data {
+    width:300px;
+    float:left;
+    margin-left:50px;
+}
+.name {
+    border:dotted 1px #ccc;
+    padding:5px;
+    border-right:0;
+    float:left;
+    width:calc(60% - 11px)
+}
+.views {
+    border:dotted 1px #ccc;
+    padding:5px;
+    float:left;
+    width:calc(40% - 12px);
+    text-align:right
+}
+
+.sidenav {
+
+  position:fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: white;
+
+}
+
+
+

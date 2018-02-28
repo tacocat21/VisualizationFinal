@@ -1,9 +1,40 @@
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="scripts/get_data.js"></script>
+    <script src="scripts/visualization.js"></script>
 
-<script src="scripts/get_data.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
+
+</head>
+<body>
+<div class="sidenav">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter by year
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">HTML</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+        </ul>
+    </div>
+</div>
+<div style="float:left">
+    <div id="chart_div"></div>
+    <button class="reset" onClick="drawRegionsMap();$('#table').html('');">Reset</button>
+</div>
+<div class='state-data'>
+    <div id="table" style="width: 300px; height: 300px;"></div>
+</div>
 <script>
-    getData(countryEmigration, function(data){
+    // sample example of how to use this
+    getData(countryEmigration, function (data) {
         console.log(data);
     })
 </script>
-<h1>Hello World</h1>
+
+</body>
