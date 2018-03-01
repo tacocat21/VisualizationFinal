@@ -4,6 +4,9 @@ Taccio Yamamoto - tacocat21
 Ivar Makadsi - Netty2  
 (ADD YOUR NAMES HERE)  
 
+PROJECT  
+Visualize the migration of the world
+
 BACKEND  
 Framework: Flask  
 Data source: UN Global Census Data  
