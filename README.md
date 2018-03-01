@@ -6,8 +6,7 @@ Ivar Makadsi - Netty2
 
 BACKEND  
 Framework: Flask  
-Data sources:  
-UN Global Census Data  
+Data source: UN Global Census Data  
 
 TO RUN SERVER  
 sh backend/run.sh  
