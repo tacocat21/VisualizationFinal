@@ -1,7 +1,7 @@
 Visualization Final Project  
 
-Taccio Yamamoto - tacocat21 
-Ivar Makadsi - Netty2
+Taccio Yamamoto - tacocat21  
+Ivar Makadsi - Netty2  
 (ADD YOUR NAMES HERE)  
 
 Backend  
