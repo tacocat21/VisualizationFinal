@@ -1,4 +1,4 @@
-VISUALIZATION PROJECT FINAL  
+VISUALIZATION PROJECT  
 
 ABOUT  
 Visualize the migration of the world  
