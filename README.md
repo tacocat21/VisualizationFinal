@@ -15,6 +15,9 @@ sh backend/run.sh
 Frontend  
 Libraries: d3.js, DataMaps  
 
+Getting data  
+Check out scripts/get_data.js to see how to get data from the backend  
+
 TODO:
 Add arrows between the top 10 countries going into and going out of the country  
 Scale arrow sizes based on the number of immigrants  
