@@ -38,8 +38,8 @@
         var geochart = new google.visualization.GeoChart(
         document.getElementById('chart_div'));
         var options = {
-            width: 556,
-            height: 347,
+            width: 1440,
+            height: 480,
             colorAxis: {
                 colors: ['#acb2b9', '#2f3f4f']
             } // Map Colors
